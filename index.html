@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Study Hub</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="entete">
+    <input
+      type="search"
+      id="recherche-matieres"
+      class="champ-recherche"
+      placeholder="Rechercher des matières…"
+    />
+
+    <nav class="onglets-vues" aria-label="Navigation principale">
+      <button class="onglet-vue actif" data-vue="bibliotheque">📚 Matières</button>
+      <button class="onglet-vue" data-vue="calendrier">📅 Calendrier</button>
+    </nav>
+
+    <div class="entete-droite">
+      <button id="btn-commencer-focus" class="btn btn-principal">▶ Commencer Focus</button>
+      <button id="btn-profil" class="avatar" aria-label="Profil">🙂</button>
+    </div>
+  </header>
+
+  <main>
+
+    <!--VUE 1 — BIBLIOTHÈQUE (écran d'accueil, affichée par défaut)-->
+    <section id="vue-bibliotheque" class="vue">
+      <h1>Votre Bibliothèque</h1>
+      <p class="sous-titre">Gérez vos matières académiques et la structure de votre programme d'études.</p>
+
+      <div class="barre-outils">
+        <label for="tri-matieres">Trier par :</label>
+        <select id="tri-matieres">
+          <option value="recents">Récents</option>
+          <option value="alphabetique">Alphabétique</option>
+          <option value="progression">Progression</option>
+        </select>
+      </div>
+
+      <div id="grille-matieres" class="grille-cartes">
+
+      </div>
+    </section>
+
+    <!--VUE 2 — PAGE D'UNE MATIÈRE (masquée par défaut)-->
+    <section id="vue-matiere" class="vue" hidden>
+      <nav class="fil-ariane" aria-label="Fil d'ariane">
+        <button id="btn-retour-bibliotheque" class="lien-fil-ariane">Matières</button>
+        <span aria-hidden="true">›</span>
+        <span id="fil-ariane-matiere"></span>
+      </nav>
+
+      <div class="entete-matiere">
+        <div>
+          <span class="badge-actif">Cours actif</span>
+          <h1 id="titre-matiere"></h1>
+        </div>
+        <div class="actions-matiere">
+          <button id="btn-modifier-matiere" class="btn btn-secondaire">✎ Modifier</button>
+          <button id="btn-ajouter-module" class="btn btn-principal">+ Ajouter un Module</button>
+        </div>
+      </div>
+
+      <div class="contenu-matiere">
+        <div id="liste-modules" class="liste-modules">
+
+        </div>
+
+        <aside class="panneau-lateral">
+          <div class="carte-panneau">
+            <h2>Ajout Rapide de Tâche</h2>
+
+            <label for="ajout-select-matiere">Matière</label>
+            <select id="ajout-select-matiere">
+
+            </select>
+
+            <label for="ajout-select-module">Module</label>
+            <select id="ajout-select-module">
+
+            </select>
+
+            <label for="ajout-input-tache">Nom de la Tâche</label>
+            <input type="text" id="ajout-input-tache" placeholder="ex. Lire l'article sur les closures" />
+
+            <button id="btn-ajouter-tache" class="btn btn-principal btn-pleine-largeur">
+              ✓ Ajouter au Backlog
+            </button>
+          </div>
+
+          <div class="carte-panneau">
+            <h2>Progression du Cours</h2>
+            <div class="progres-chiffre">
+              <span id="progres-pourcentage">0%</span>
+              <div>
+                <strong>En Bonne Voie</strong>
+                <p>Complétion estimée : <span id="date-echeance">—</span></p>
+              </div>
+            </div>
+            <dl class="stats-matiere">
+              <dt>Total des Modules</dt>
+              <dd id="stat-total-modules">0</dd>
+              <dt>Tâches Complétées</dt>
+              <dd id="stat-taches-completees">0 / 0</dd>
+              <dt>Heures de Travail Profond</dt>
+              <dd id="stat-heures">0 h</dd>
+            </dl>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!--VUE 3 — CALENDRIER (masquée par défaut)-->
+    <section id="vue-calendrier" class="vue" hidden>
+      <div class="entete-calendrier">
+        <h1 id="titre-mois"></h1>
+        <div class="nav-calendrier">
+          <button id="btn-mois-precedent" aria-label="Mois précédent">‹</button>
+          <button id="btn-aujourdhui">Aujourd'hui</button>
+          <button id="btn-mois-suivant" aria-label="Mois suivant">›</button>
+        </div>
+      </div>
+
+      <div id="grille-calendrier" class="grille-calendrier">
+
+      </div>
+    </section>
+
+  </main>
+
+  <!--POPUP POMODORO — "Session de Travail Profond"-->
+  <div id="popup-pomodoro" class="popup-fond" hidden>
+    <div class="popup-pomodoro" role="dialog" aria-modal="true" aria-labelledby="popup-titre">
+      <div class="popup-entete">
+        <h2 id="popup-titre">⏱ Session de Travail Profond</h2>
+        <button id="btn-fermer-popup" class="btn-fermer" aria-label="Fermer">✕</button>
+      </div>
+
+      <div class="onglets-duree">
+        <button class="onglet-duree actif" data-type="pomodoro" data-minutes="25">Pomodoro (25m)</button>
+        <button class="onglet-duree" data-type="pause_courte" data-minutes="5">Pause Courte (5m)</button>
+        <button class="onglet-duree" data-type="pause_longue" data-minutes="15">Pause Longue (15m)</button>
+      </div>
+
+      <div class="minuteur">
+        <span id="minuteur-affichage">25:00</span>
+        <p id="minuteur-statut">FOCUS ACTIF</p>
+      </div>
+
+      <label for="select-matiere-active">Matière Active</label>
+      <select id="select-matiere-active">
+
+      </select>
+
+      <div class="boutons-minuteur">
+        <button id="btn-reinitialiser-minuteur" class="btn btn-secondaire" aria-label="Réinitialiser">↺</button>
+        <button id="btn-demarrer-pause" class="btn btn-principal">Démarrer</button>
+        <button id="btn-terminer-tache" class="btn btn-succes" hidden>✓ Terminer &amp; Cocher</button>
+      </div>
+
+      <p class="citation">« La discipline est le pont entre les buts et l'accomplissement. »</p>
+    </div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
